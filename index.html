@@ -1,0 +1,100 @@
+<!doctype html>
+<html id="main">
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="style/fireworks.css" media="screen" />
+		<style>
+			div {
+			    text-align: center;
+				font-size: 300px;
+			}
+
+
+		</style>
+		<script type="text/javascript" src="script/soundmanager2-nodebug-jsmin.js"></script>
+		<script type="text/javascript" src="script/fireworks.js"></script>
+		<script type="text/javascript">
+			window.onload=function() {
+			  h('horloge');
+			};
+
+			var colors = [{
+				backgroundColor: "#C31A1E",
+				color: "#1C9F15"
+			},{
+				backgroundColor: "#363585",
+				color: "#BF9E38"
+			},{
+				backgroundColor: "#19807C",
+				color: "#D27429"
+			},{
+				backgroundColor: "#047A04",
+				color: "#035C5C"
+			},{
+				backgroundColor: "#310A6A",
+				color: "#9C0101"
+			}];
+
+			function h(el) {
+				if(typeof el=="string") {
+					el = document.getElementById(el);
+				}
+				var htmlElement = document.getElementById("main");
+				var ref = new Date('01/01/2019');
+				// var ref = new Date();
+				// ref.setSeconds(ref.getSeconds() + 15);
+
+				var cpt = 0;
+				var lastDate = new Date();
+
+				var fire = 0;
+				var fiestaConfDone = false;
+				function feu_d_artifice(){
+					if(!fiestaConfDone){
+						htmlElement.style.backgroundColor = 'midnightblue';
+						htmlElement.style.color = 'goldenrod';
+						fiestaConfDone = true;
+					}
+					if(fire === 0){
+						createFirework(50,150,7,3,null,null,null,null,true,true);
+					}
+					fire = (fire + 1) %30;
+				}
+
+				function tick() {
+					var date = new Date();
+					var remainingTime =  Math.round((ref - date) / 1000);
+					if(!!lastDate && lastDate.getSeconds() !== date.getSeconds()){
+						if(remainingTime <= 0){
+							el.innerHTML = "BONNE ANNEE";
+							feu_d_artifice();
+							// off();
+						} else {
+
+							var color = colors[cpt];
+
+							//console.log('changement de seconde', cpt, colors.length);
+							htmlElement.style.backgroundColor = color.backgroundColor;
+							htmlElement.style.color = color.color;
+
+							el.innerHTML = remainingTime;
+
+							cpt = (cpt + 1) % colors.length;
+							lastDate = date;
+						}
+					}
+				}
+
+				var off = setInterval(tick,10);
+			}
+		</script>
+	</head>
+	<body>
+		<div id="fireworks-template">
+ 			<div id="fw" class="firework"></div>
+ 			<div id="fp" class="fireworkParticle"><img src="image/particles.gif" alt="" /></div>
+		</div>
+		<div id="fireContainer"></div>
+		<div id="horloge"></div>
+	</body>
+</html>
